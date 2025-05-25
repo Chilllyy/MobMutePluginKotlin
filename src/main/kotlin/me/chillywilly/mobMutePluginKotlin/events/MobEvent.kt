@@ -1,6 +1,7 @@
 package me.chillywilly.mobMutePluginKotlin.events
 
 import me.chillywilly.mobMutePluginKotlin.MobMute
+import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -15,18 +16,22 @@ class MobEvent : Listener {
         val main = player.inventory.itemInMainHand.type == Material.NAME_TAG
         val off = player.inventory.itemInOffHand.type == Material.NAME_TAG
 
+        val MM = MiniMessage.miniMessage()
+
         val item_name = when {
-            main -> player.inventory.itemInMainHand.displayName().toString()
-            off -> player.inventory.itemInOffHand.displayName().toString()
-            else -> ""
+            main -> MM.serialize(player.inventory.itemInMainHand.displayName()).lowercase()
+            off -> MM.serialize(player.inventory.itemInOffHand.displayName()).lowercase()
+            else -> "empty"
         }
 
-        if (item_name == "[mute]") {
+        if ("[mute]" in item_name) {
             entity.isSilent = true
-            player.sendMessage(MobMute.getMMComp("mute"))
-        } else if (item_name == "[unmute]") {
+            player.sendMessage(MobMute.instance.getMMComp("mute"))
+            event.isCancelled = true
+        } else if ("[unmute]" in item_name) {
             entity.isSilent = false
-            player.sendMessage(MobMute.getMMComp("unmute"))
+            player.sendMessage(MobMute.instance.getMMComp("unmute"))
+            event.isCancelled = true
         }
     }
 }
