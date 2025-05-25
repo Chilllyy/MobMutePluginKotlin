@@ -1,0 +1,5 @@
+name: MobMutePluginKotlin
+version: '1.0-SNAPSHOT'
+main: me.chillywilly.mobMutePluginKotlin.MobMute
+api-version: '1.21'
+authors: [ Chilly_Willy ]
